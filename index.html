@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Split Ease by Wadi - Aplikasi Split Bill</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Split <span class="highlight">Ease</span> by Wadi</h1>
+        <p>Bagi tagihan jadi gampang dan menyenangkan!</p>
+    </header>
+
+    <div class="container">
+        <div class="section">
+            <h2>📝 Detail Tagihan</h2>
+            <label for="bill-name">Nama Tagihan (Contoh: Makan Malam Pizza)</label>
+            <input type="text" id="bill-name" placeholder="Masukkan nama tagihan">
+        </div>
+
+        <div class="section">
+            <h2>🧑‍🤝‍🧑 Tambah Orang</h2>
+            <div class="input-group">
+                <input type="text" id="person-name" placeholder="Nama orang">
+                <button id="add-person-btn">+ Tambah Orang</button>
+            </div>
+            <ul id="people-list">
+                </ul>
+        </div>
+
+        <div class="section">
+            <h2>🛍️ Tambah Item/Produk</h2>
+            <label for="item-name">Nama Item</label>
+            <input type="text" id="item-name" placeholder="Contoh: Pizza Pepperoni">
+
+            <label for="item-price">Harga Item (Rp)</label>
+            <input type="number" id="item-price" placeholder="Contoh: 85000">
+
+            <label>Siapa yang ikut bayar item ini?</label>
+            <div id="item-payers-list" class="person-checkbox-group">
+                <p><em>Tambahkan orang terlebih dahulu untuk memilih pembayar.</em></p>
+            </div>
+            <button id="add-item-btn">+ Tambah Item</button>
+
+            <h3>Daftar Item Ditambahkan:</h3>
+            <ul id="items-list">
+                </ul>
+        </div>
+
+        <div class="section">
+            <h2>💸 Pajak, Layanan & Diskon</h2>
+            <button id="toggle-additional-costs-btn" class="toggle-section-btn" aria-expanded="false" aria-controls="additional-costs-fields">
+                Tambahkan Pajak/Layanan/Diskon (Opsional) <span class="toggle-icon">+</span>
+            </button>
+            <div id="additional-costs-fields" class="collapsible-content" style="display: none;">
+                <p class="section-description">Isi hanya jika ada biaya tambahan atau diskon pada transaksi Anda.</p>
+                <label for="tax-percentage">Pajak (%)</label>
+                <input type="number" id="tax-percentage" placeholder="Contoh: 10" value="0">
+
+                <label for="service-fee">Biaya Layanan (Rp)</label>
+                <input type="number" id="service-fee" placeholder="Contoh: 5000" value="0">
+
+                <label for="discount-amount">Diskon (Rp)</label>
+                <input type="number" id="discount-amount" placeholder="Contoh: 10000" value="0">
+
+                <label for="additional-cost-distribution">Bagikan Pajak & Layanan:</label>
+                <select id="additional-cost-distribution">
+                    <option value="evenly">Rata ke semua orang</option>
+                    <option value="proportionally">Proporsional berdasarkan belanja</option>
+                </select>
+            </div>
+        </div>
+
+
+        <button id="calculate-bill-btn">📊 Hitung Tagihan</button>
+
+        <div id="results-section" class="section" style="display: none;">
+            <h2>💰 Rincian Pembayaran Detail</h2>
+            <div id="bill-summary">
+                </div>
+            <p class="total-bill" id="total-bill-display">Total Keseluruhan Tagihan: Rp 0</p>
+            <div class="action-buttons-results">
+                <button id="copy-results-btn" class="tertiary">📋 Salin Rincian</button>
+                <button id="print-btn" class="action-btn">🖨️ Print Rincian</button>
+            </div>
+        </div>
+
+        <button id="start-new-btn">🔄 Mulai Baru</button>
+    </div>
+
+    <footer>
+        <p>Dibuat oleh Wadi untuk kalian si penyuka Split Bill.</p>
+        <p>&copy; <span id="currentYear"></span> Split Ease by Wadi. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
