@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Additional Costs Section Elements
     const toggleAdditionalCostsBtn = document.getElementById('toggle-additional-costs-btn');
     const additionalCostsFieldsDiv = document.getElementById('additional-costs-fields');
-    const toggleIcon = toggleAdditionalCostsBtn.querySelector('.toggle-icon'); // Get the span for the icon
+    const toggleIcon = toggleAdditionalCostsBtn.querySelector('.toggle-icon'); 
 
     const taxPercentageInput = document.getElementById('tax-percentage');
     const serviceFeeInput = document.getElementById('service-fee');
@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const startNewBtn = document.getElementById('start-new-btn');
     const currentYearSpan = document.getElementById('currentYear');
     const printBtn = document.getElementById('print-btn');
+    const saveImageBtn = document.getElementById('save-image-btn');
 
     // Initialize
     if (currentYearSpan) {
@@ -45,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const isExpanded = additionalCostsFieldsDiv.style.display === 'block';
             additionalCostsFieldsDiv.style.display = isExpanded ? 'none' : 'block';
             toggleAdditionalCostsBtn.setAttribute('aria-expanded', String(!isExpanded));
-            toggleIcon.textContent = isExpanded ? '+' : '−'; // Using minus for expanded state
+            toggleIcon.textContent = isExpanded ? '+' : '−'; 
         });
     }
 
@@ -95,7 +96,7 @@ document.addEventListener('DOMContentLoaded', () => {
             nameSpan.textContent = person.name;
 
             const removeBtn = document.createElement('button');
-            removeBtn.className = 'secondary';
+            removeBtn.className = 'secondary'; // Added class for consistent styling
             removeBtn.textContent = 'Hapus';
             removeBtn.style.padding = '5px 10px'; 
             removeBtn.style.fontSize = '0.8em';
@@ -309,17 +310,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (discountAmount > 0 && people.length > 0) {
             const totalBillBeforeApplyingDiscountThisStep = personDetails.reduce((sum, p) => sum + p.finalAmount, 0);
-            if (totalBillBeforeApplyingDiscountThisStep > 0) {
+            if (totalBillBeforeApplyingDiscountThisStep > 0) { // Prevent division by zero or applying discount to a zero/negative bill
                  personDetails.forEach(person => {
-                    const proportionOfBill = person.finalAmount / totalBillBeforeApplyingDiscountThisStep;
+                    // Distribute discount proportionally to their current bill amount
+                    const proportionOfBill = person.finalAmount > 0 ? person.finalAmount / totalBillBeforeApplyingDiscountThisStep : (1 / people.length); // if person's amount is 0, distribute discount evenly
                     const discountForPerson = discountAmount * proportionOfBill;
                     person.shareOfDiscount = discountForPerson;
                     person.finalAmount -= discountForPerson;
-                    person.finalAmount = Math.max(0, person.finalAmount);
+                    person.finalAmount = Math.max(0, person.finalAmount); // Ensure not negative
                 });
             }
         }
         
+        // Round all monetary values for display
         personDetails.forEach(person => {
             person.itemContributions.forEach(contrib => {
                 contrib.itemFullPrice = Math.round(contrib.itemFullPrice);
@@ -425,9 +428,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 textToCopy += "  Kontribusi Item:\n";
                 itemsList.forEach(itemLi => {
                     const itemNamePrice = itemLi.querySelector('.item-name-price').textContent.trim();
-                    const itemShareRaw = itemLi.querySelector('.item-share').innerHTML.trim(); 
-                    const itemShare = itemShareRaw.replace(/<br\s*\/?>/gi, " ").replace(/↳/g, "").replace(/\s+/g, " ").trim();
-                    textToCopy += `    - ${itemNamePrice}\n      ↳ ${itemShare}\n`;
+                    
+                    const itemShareElement = itemLi.querySelector('.item-share');
+                    let itemShareText = "";
+                    if (itemShareElement) {
+                        itemShareText = itemShareElement.textContent
+                                          .replace(/↳/g, "")      
+                                          .replace(/\s+/g, " ")  
+                                          .trim();
+                    }
+                    textToCopy += `    - ${itemNamePrice}\n      ↳ ${itemShareText}\n`;
                 });
             }
 
@@ -442,7 +452,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         textToCopy += `\n${totalBillDisplayP.textContent}\n\n`;
-        textToCopy += `Dibagi menggunakan SplitEase!`;
+        textToCopy += `Dibagi menggunakan Split Ease by Wadi!`;
 
         navigator.clipboard.writeText(textToCopy)
             .then(() => alert('Rincian berhasil disalin ke clipboard!'))
@@ -457,7 +467,6 @@ document.addEventListener('DOMContentLoaded', () => {
             people = []; items = [];
             billNameInput.value = ''; personNameInput.value = ''; itemNameInput.value = ''; itemPriceInput.value = '';
             
-            // Reset additional costs fields and toggle
             taxPercentageInput.value = '0'; 
             serviceFeeInput.value = '0'; 
             discountAmountInput.value = '0';
@@ -477,6 +486,58 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    function saveResultsAsImage() {
+        const elementToCapture = document.getElementById('results-section');
+        if (!elementToCapture || typeof html2canvas === 'undefined') {
+            alert('Fitur simpan gambar tidak tersedia atau gagal memuat library html2canvas.');
+            return;
+        }
+
+        const originalButtonText = saveImageBtn.innerHTML;
+        saveImageBtn.innerHTML = 'Memproses...';
+        saveImageBtn.disabled = true;
+
+        const options = {
+            scale: window.devicePixelRatio * 1.5, 
+            useCORS: true, 
+            backgroundColor: '#eaf5ff', // Match results section background
+            scrollX: 0, // Ensure capture starts from the top-left
+            scrollY: 0,
+             onclone: (document) => {
+                // If the collapsible section for additional costs is hidden but has values,
+                // we might want to show it for the image capture.
+                // However, for simplicity, we'll capture what's currently shown.
+                // If you want to ensure it's always shown in the image if values exist:
+                // const additionalCostsDiv = document.getElementById('additional-costs-fields');
+                // if (additionalCostsDiv && (parseFloat(taxPercentageInput.value) > 0 || parseFloat(serviceFeeInput.value) > 0 || parseFloat(discountAmountInput.value) > 0)) {
+                //     additionalCostsDiv.style.display = 'block';
+                // }
+            }
+        };
+
+        html2canvas(elementToCapture, options).then(canvas => {
+            const imageURL = canvas.toDataURL('image/png');
+            const billNameText = sanitizeHTML(billNameInput.value.trim()) || "rincian_pembayaran";
+            const filename = `${billNameText.replace(/[^a-z0-9]/gi, '_').toLowerCase()}_splitease_by_wadi.png`;
+
+            const link = document.createElement('a');
+            link.href = imageURL;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            saveImageBtn.innerHTML = originalButtonText;
+            saveImageBtn.disabled = false;
+        }).catch(err => {
+            console.error('Gagal menyimpan gambar:', err);
+            alert('Terjadi kesalahan saat mencoba menyimpan gambar.');
+            saveImageBtn.innerHTML = originalButtonText;
+            saveImageBtn.disabled = false;
+        });
+    }
+
+
     // --- Event Listeners ---
     addPersonBtn.addEventListener('click', addPerson);
     personNameInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') addPerson(); });
@@ -487,4 +548,5 @@ document.addEventListener('DOMContentLoaded', () => {
     printBtn.addEventListener('click', () => {
         window.print();
     });
+    saveImageBtn.addEventListener('click', saveResultsAsImage);
 });

@@ -60,13 +60,13 @@ header p {
 .section h2 {
     color: #34495e;
     font-size: 1.5em;
-    margin-bottom: 10px; /* Adjusted margin for title */
+    margin-bottom: 10px;
     border-left: 4px solid #3498db;
     padding-left: 10px;
 }
 
 .section h3 { /* For "Daftar Item Ditambahkan" */
-    margin-top: 0; /* Adjusted as #add-item-btn has margin-bottom */
+    margin-top: 0;
     margin-bottom: 10px;
     font-size: 1.2em;
     color: #34495e;
@@ -138,23 +138,29 @@ button:active {
 }
 
 
-button.secondary {
+button.secondary { /* For delete buttons */
     background-color: #e74c3c;
+    box-shadow: 0 2px 5px rgba(184, 40, 23, 0.2);
 }
 button.secondary:hover {
     background-color: #c0392b;
+    box-shadow: 0 4px 8px rgba(184, 40, 23, 0.3);
 }
-button.tertiary {
+button.tertiary { /* For copy button */
     background-color: #95a5a6;
+    box-shadow: 0 2px 5px rgba(100, 110, 112, 0.2);
 }
 button.tertiary:hover {
     background-color: #7f8c8d;
+    box-shadow: 0 4px 8px rgba(100, 110, 112, 0.3);
 }
-button.action-btn { /* For Print button */
+button.action-btn { /* For Print/Image buttons */
     background-color: #5dade2;
+    box-shadow: 0 2px 5px rgba(53, 152, 219, 0.2);
 }
 button.action-btn:hover {
     background-color: #4a98c5;
+    box-shadow: 0 4px 8px rgba(53, 152, 219, 0.3);
 }
 
 /* Toggle Button for Optional Sections */
@@ -165,18 +171,18 @@ button.action-btn:hover {
     width: 100%;
     text-align: left;
     padding: 10px 15px;
-    margin-top: 0px; /* Space from the section title H2 */
-    margin-bottom: 0px; /* No margin if content is hidden */
-    font-weight: normal; /* Lighter than main buttons */
+    margin-top: 0px; 
+    margin-bottom: 0px; 
+    font-weight: normal; 
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: none; /* No shadow for this type of button */
+    box-shadow: none; 
 }
 
 .toggle-section-btn:hover {
     background-color: #e9e9e9;
-    transform: none; /* No hover transform */
+    transform: none; 
     box-shadow: none;
 }
 
@@ -186,21 +192,22 @@ button.action-btn:hover {
     transition: transform 0.3s ease;
 }
 .toggle-section-btn[aria-expanded="true"] .toggle-icon {
-    transform: rotate(45deg); /* Example: X or rotated plus */
+    transform: rotate(45deg); 
 }
 
 
 .collapsible-content {
+    /* display: none; is set inline initially */
     padding-top: 15px;
     border-top: 1px dashed #e0e0e0;
-    margin-top: 15px; /* Add margin when content is shown */
+    margin-top: 15px; 
 }
 
 .section-description {
     font-size: 0.9em;
     color: #555;
     margin-bottom: 15px;
-    background-color: #eef7ff; /* Slightly different blue */
+    background-color: #eef7ff; 
     padding: 10px;
     border-radius: 4px;
     border-left: 3px solid #3498db;
@@ -212,21 +219,25 @@ button.action-btn:hover {
     width: 100%;
     padding: 15px;
     font-size: 1.2em;
-    margin-top: 20px; /* Ensure space before this main button */
+    margin-top: 20px; 
     margin-bottom: 20px;
     background-color: #2ecc71;
+    box-shadow: 0 2px 5px rgba(39, 174, 96, 0.2);
 }
 #calculate-bill-btn:hover {
     background-color: #27ae60;
+    box-shadow: 0 4px 8px rgba(39, 174, 96, 0.3);
 }
 
 #start-new-btn {
     width: 100%;
     background-color: #e67e22;
-    margin-top: 10px; /* Space from result buttons or calculate button if results hidden */
+    margin-top: 10px; 
+    box-shadow: 0 2px 5px rgba(211, 84, 0, 0.2);
 }
 #start-new-btn:hover {
     background-color: #d35400;
+    box-shadow: 0 4px 8px rgba(211, 84, 0, 0.3);
 }
 
 #add-item-btn {
@@ -284,13 +295,13 @@ ul {
     background-color: #eaf5ff;
     padding: 20px;
     border-radius: 8px;
-    margin-top: 20px; /* Added margin top for spacing */
+    margin-top: 20px; 
 }
 
 #results-section h2 {
     color: #2c3e50;
     border-left-color: #2c3e50;
-    margin-bottom: 15px; /* Ensure space after this title */
+    margin-bottom: 15px; 
 }
 
 .person-payment-summary {
@@ -398,6 +409,7 @@ ul {
 
 .action-buttons-results {
     display: flex;
+    flex-wrap: wrap;
     gap: 10px;
     margin-top: 20px;
     justify-content: center;
@@ -405,7 +417,8 @@ ul {
 
 .action-buttons-results button {
     flex-grow: 1;
-    max-width: 200px;
+    flex-basis: 180px; 
+    max-width: 220px; 
 }
 
 
@@ -453,10 +466,11 @@ footer a:hover {
     }
 
     .action-buttons-results {
-        flex-direction: column;
+        flex-direction: column; 
     }
     .action-buttons-results button {
-        max-width: 100%;
+        max-width: 100%; 
+        flex-basis: auto; 
     }
 }
 
@@ -474,17 +488,14 @@ footer a:hover {
         background-color: #ffffff !important;
     }
     
-    /* Ensure collapsible content is visible in print if it was open */
-    /* Or decide if it should always be printed, regardless of view state */
-    /* For simplicity, if it's part of results, it should be visible for print */
     #additional-costs-fields {
-        display: block !important; /* Ensure it's printed if part of the results flow */
+        display: block !important; 
         padding-top: 10px !important;
         border-top: 1px dashed #ccc !important;
         margin-top: 10px !important;
     }
-     .section-description { /* Make description also print friendly */
-        background-color: #f8f8f8 !important; /* Very light grey or white */
+     .section-description { 
+        background-color: #f8f8f8 !important; 
         border-left: 2px solid #aaa !important;
         color: #000 !important;
         padding: 8px !important;
@@ -581,7 +592,8 @@ footer a:hover {
     .action-buttons-results,
     #copy-results-btn,
     #print-btn,
-    #toggle-additional-costs-btn /* Hide the toggle button itself in print */ {
+    #save-image-btn,
+    #toggle-additional-costs-btn {
         display: none !important;
     }
 
