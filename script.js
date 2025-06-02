@@ -448,7 +448,7 @@ document.addEventListener('DOMContentLoaded', () => {
             textToCopy += `  Subtotal Item: ${subtotalLine}\n`;
             textToCopy += `  Pajak & Layanan: ${additionalCostLine}\n`;
             textToCopy += `  Diskon: ${discountLine}\n`;
-            textToCopy += "-------------------------------------\n";
+            textToCopy += "-------------------------------------\n\n";
         });
 
         textToCopy += `\n${totalBillDisplayP.textContent}\n\n`;
